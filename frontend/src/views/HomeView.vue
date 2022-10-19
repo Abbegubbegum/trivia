@@ -1,18 +1,35 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+	<div class="wrapper">
+		<LobbyTable v-if="!gameStarted" />
+		<div v-if="gameStarted && waitingForCommands">
+			<h1>WAITING FOR HOST</h1>
+		</div>
+	</div>
 </template>
-
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+import LobbyTable from "@/components/LobbyTable.vue";
+import { socket } from "@/main";
 
 export default defineComponent({
-  name: "HomeView",
-  components: {
-    HelloWorld,
-  },
+	data() {
+		return {
+			gameStarted: false,
+			waitingForCommands: true,
+		};
+	},
+	components: { LobbyTable },
+	created() {
+		socket.on("START_GAME", (data) => {
+			this.gameStarted = true;
+		});
+	},
 });
 </script>
+<style scoped>
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+</style>

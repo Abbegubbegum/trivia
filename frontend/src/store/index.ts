@@ -1,9 +1,12 @@
 import { createStore } from "vuex";
 
 export default createStore({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+	state: {
+		currentPlayer: {} as any,
+		players: [] as any[],
+	},
+	getters: {},
+	mutations: {},
+	actions: {},
+	modules: {},
 });
