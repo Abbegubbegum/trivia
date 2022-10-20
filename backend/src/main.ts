@@ -61,8 +61,6 @@ app.post("/players", (req, res) => {
 
 	players.push(player);
 
-	console.log(players);
-
 	res.sendStatus(200);
 });
 
@@ -70,9 +68,6 @@ app.post("/answer", (req, res) => {
 	let answer = req.body.answer;
 
 	res.status(200);
-
-	console.log(answer);
-	console.log(correctAnswer);
 
 	if (answer === correctAnswer) {
 		res.send("CORRECT_ANSWER");
