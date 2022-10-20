@@ -16,6 +16,7 @@ socket.on("NEW_PLAYER", (data) => {
 socket.on("PLAYERS", (data) => {
 	store.state.players = data;
 });
+
 socket.on("MESSAGE", (data) => {
 	console.log(data);
 });

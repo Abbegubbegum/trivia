@@ -10,6 +10,10 @@ let gamestates = {
 
 let gamestate = gamestates.waitingForGame;
 
+let players: any[] = [];
+
+let correctAnswer = "";
+
 const io = new Server(3001, {
 	cors: {
 		origin: "http://localhost:8080",
@@ -38,18 +42,12 @@ io.on("connection", (socket) => {
 	socket.on("QUESTION_PLAYER", (data) => {
 		io.emit("QUESTION_PLAYER", data);
 		gamestate = gamestates.playerAnswering;
-	});
-
-	socket.on("PLAYER_ANSWER", (data) => {
-		io.emit("PLAYER_ANSWER", data);
-		gamestate = gamestates.waitingForCommand;
+		correctAnswer = data.answers[0];
 	});
 });
 
 let app = express();
 let port = 3000;
-
-let players: any[] = [];
 
 app.use(cors());
 app.use(express.json());
@@ -66,6 +64,23 @@ app.post("/players", (req, res) => {
 	console.log(players);
 
 	res.sendStatus(200);
+});
+
+app.post("/answer", (req, res) => {
+	let answer = req.body.answer;
+
+	res.status(200);
+
+	console.log(answer);
+	console.log(correctAnswer);
+
+	if (answer === correctAnswer) {
+		res.send("CORRECT_ANSWER");
+	} else {
+		res.send("WRONG_ANSWER");
+	}
+
+	io.emit("ANSWER");
 });
 
 app.listen(port, () => {

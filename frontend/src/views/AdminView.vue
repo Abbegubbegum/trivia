@@ -20,10 +20,14 @@
 		<h2>Question</h2>
 		<input type="text" v-model="q" />
 		<h3>Answers</h3>
-		<input type="text" v-model="a1" />
-		<input type="text" v-model="a2" />
-		<input type="text" v-model="a3" />
-		<input type="text" v-model="a4" />
+		<div class="answers">
+			Correct Answer:
+			<input type="text" v-model="a1" />
+			Other:
+			<input type="text" v-model="a2" />
+			<input type="text" v-model="a3" />
+			<input type="text" v-model="a4" />
+		</div>
 		<div class="btn-group">
 			<button type="button" @click="sendQuestion">Submit</button>
 			<button type="button" @click="closePopup">Close</button>
@@ -58,7 +62,7 @@ export default defineComponent({
 			this.waitingForCommands = true;
 		},
 		selectPlayer(player: any) {
-			this.selectPlayer = player;
+			this.selectedPlayer = player;
 			this.showpopup = true;
 		},
 		closePopup() {
@@ -76,11 +80,13 @@ export default defineComponent({
 				return;
 			}
 
-			socket.emit("SEND_QUESTION", {
+			socket.emit("QUESTION_PLAYER", {
 				player: this.selectedPlayer,
 				question: this.q,
 				answers: [this.a1, this.a2, this.a3, this.a4],
 			});
+
+			this.closePopup();
 		},
 	},
 	created() {
@@ -95,10 +101,18 @@ export default defineComponent({
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	height: 100vh;
+}
+
+button {
+	font-size: 1rem;
+	font-weight: bold;
+	padding: 1rem;
 }
 
 .question-popup {
-	padding: 1rem;
+	text-align: center;
+	padding: 2rem;
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -108,5 +122,13 @@ export default defineComponent({
 	border: 1px solid black;
 	box-shadow: 5px 5px 10px;
 	border-radius: 5px;
+}
+
+.answers {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: start;
+	margin: 1rem 0;
 }
 </style>
