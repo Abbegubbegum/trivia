@@ -1,6 +1,6 @@
 import express, { request } from "express";
 import cors from "cors";
-import { Server } from "socket.io";
+import Server from "socket.io";
 
 let gamestates = {
 	waitingForGame: "WAITING_FOR_GAME",
@@ -21,8 +21,10 @@ const io = new Server(3001, {
 	},
 });
 
-io.on("connection", (socket) => {
-	socket.on("ADD_PLAYER", (data) => {
+io.on("connection", (socket: any) => {
+	console.log("Connection established");
+
+	socket.on("ADD_PLAYER", (data: any) => {
 		players.push(data);
 		io.emit("NEW_PLAYER", data);
 		if (gamestate !== gamestates.waitingForGame) {
@@ -30,16 +32,16 @@ io.on("connection", (socket) => {
 		}
 	});
 
-	socket.on("GET_PLAYERS", (data) => {
+	socket.on("GET_PLAYERS", (data: any) => {
 		socket.emit("PLAYERS", players);
 	});
 
-	socket.on("START_GAME", (data) => {
+	socket.on("START_GAME", (data: any) => {
 		io.emit("START_GAME");
 		gamestate = gamestates.waitingForCommand;
 	});
 
-	socket.on("QUESTION_PLAYER", (data) => {
+	socket.on("QUESTION_PLAYER", (data: any) => {
 		io.emit("QUESTION_PLAYER", data);
 		gamestate = gamestates.playerAnswering;
 		correctAnswer = data.answers[0];
