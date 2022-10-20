@@ -52,6 +52,10 @@ let port = 3000;
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+	res.status(200).send("Hello world!");
+});
+
 app.get("/players", (req, res) => {
 	res.status(200).json(players);
 });
